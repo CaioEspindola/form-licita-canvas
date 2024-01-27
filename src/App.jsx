@@ -11,8 +11,25 @@ const downloadCanvas = () => {
   if (camposObrigatoriosPreenchidos) {
     // Substitua 'licita-canvas-download.png' pelo nome real do seu arquivo
     const arquivoCanvas = '/licita-canvas-download.png';
-    // Redireciona a página para o arquivo, iniciando o download
-    window.open(arquivoCanvas, '_blank');
+
+    // Cria um objeto Blob com a imagem
+    fetch(arquivoCanvas)
+      .then(response => response.blob())
+      .then(blob => {
+        // Cria um link temporário para o Blob
+        const url = URL.createObjectURL(blob);
+
+        // Cria um link <a> para o Blob e inicia o download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'licita-canvas-download.png';
+        document.body.appendChild(link);
+        link.click();
+
+        // Libera recursos
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      });
   } else {
     // Se campos obrigatórios não estiverem preenchidos, você pode exibir uma mensagem ou tomar outra ação.
     /* alert('Preencha todos os campos obrigatórios antes de baixar o arquivo.'); */

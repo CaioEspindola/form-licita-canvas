@@ -2,14 +2,41 @@ import { initializeApp } from "firebase/app";
 import { addDoc, collection, getFirestore, doc, deleteDoc } from "firebase/firestore";
 import { useState } from "react";
 import './App.css'
-/* import { imgLogo } from "../public/logo-licita-canvas-semfundo.png" */
 
+//Start Function downloadCanvas. Função e logica para fazer o download apos preencher o form.
 const downloadCanvas = () => {
-  // Substitua 'caminho/do/arquivo' pelo caminho real do seu arquivo
-  const arquivoCanvas = '/licita-canvas-download.png';
- // Redireciona a página para o arquivo, iniciando o download
-  window.location.href = arquivoCanvas;
+  // Verifica se todos os campos obrigatórios estão preenchidos
+  const camposObrigatoriosPreenchidos = validarCamposObrigatorios();
+
+  if (camposObrigatoriosPreenchidos) {
+    // Substitua 'licita-canvas-download.png' pelo nome real do seu arquivo
+    const arquivoCanvas = '/licita-canvas-download.png';
+    // Redireciona a página para o arquivo, iniciando o download
+    window.open(arquivoCanvas, '_blank');
+  } else {
+    // Se campos obrigatórios não estiverem preenchidos, você pode exibir uma mensagem ou tomar outra ação.
+    /* alert('Preencha todos os campos obrigatórios antes de baixar o arquivo.'); */
+  }
 };
+
+const validarCamposObrigatorios = () => {
+  
+  const camposObrigatorios = ['nome', 'email', 'telefone', 'cidade', 'estado'];
+
+  for (const campo of camposObrigatorios) {
+    const valorCampo = document.getElementById(campo).value;
+
+    // Se algum campo obrigatório estiver vazio, retorna falso
+    if (!valorCampo) {
+      return false;
+    }
+  }
+
+  // Se todos os campos obrigatórios estiverem preenchidos, retorna verdadeiro
+  return true;
+};
+
+//End Function downloadCanvas
 
 const firebaseApp = initializeApp ({
   apiKey: "AIzaSyA8S-mCR6yq40d37H0QTDcDU2BzyCA4NOI",
@@ -70,12 +97,12 @@ export const App = () => {
       <img className="img-logo" src="/logo-licita-canvas-semfundo.png "alt="" />
       <h1 className="title-form">Preencha as informações a seguir e receba o Licita Canvas:</h1>
       <form action="" method="">
-        <input type="text" placeholder="Nome completo" value={nome} onChange={(e) => setNome(e.target.value)} pattern="[a-zA-Z]{3,}" title="Digite seu nome sem usar números" required/>
-        <input type="email" placeholder="email@email.com" value={email} onChange={(e) => setEmail(e.target.value)} title="Digite seu email" required/>
-        <input type="text" placeholder="(99)9999-9999" value={telefone} onChange={(e) => setTelefone(e.target.value)} pattern="[0-9()]+" title="Digite seu telefone. Apenas números" required/>
+        <input type="text" placeholder="Nome completo" id="nome" value={nome} onChange={(e) => setNome(e.target.value)} pattern="[a-zA-Z]{3,}" title="Digite seu nome sem usar números" required/>
+        <input type="email" placeholder="email@email.com" id="email" value={email} onChange={(e) => setEmail(e.target.value)} title="Digite seu email" required/>
+        <input type="text" placeholder="(67)966666666" id="telefone" value={telefone} onChange={(e) => setTelefone(e.target.value)}  pattern="\([0-9]{2}\)[0-9]{4}[0-9]{4}" title="Digite seu telefone. Apenas números" required/>
         <input type="text" placeholder="Órgão ou entidade governamental" value={entidadegov} onChange={(e) => setEntidadeGov(e.target.value)}/>
-        <input type="text" placeholder="Cidade" value={cidade} onChange={(e) => setCidade(e.target.value)} required/>
-        <input type="text" placeholder="Estado" value={estado} onChange={(e) => setEstado(e.target.value)} required/>
+        <input type="text" placeholder="Cidade" id="cidade" value={cidade} onChange={(e) => setCidade(e.target.value)} required/>
+        <input type="text" placeholder="Estado" id="estado" value={estado} onChange={(e) => setEstado(e.target.value)} required/>
         <button className="button-form" onClick={() => { criarUser(); downloadCanvas(); }}>Baixar Canvas</button>
       </form>
 

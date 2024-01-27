@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, getDocs, getFirestore, doc, deleteDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { addDoc, collection, getFirestore, doc, deleteDoc } from "firebase/firestore";
+import { useState } from "react";
 import './App.css'
 /* import { imgLogo } from "../public/logo-licita-canvas-semfundo.png" */
 
@@ -29,6 +29,7 @@ export const App = () => {
   const [ cidade, setCidade ] = useState("")
   const [ estado, setEstado ] = useState("")
 
+  // eslint-disable-next-line
   const [ users, setUsers ] = useState([])
 
   const db = getFirestore(firebaseApp)
@@ -46,15 +47,16 @@ export const App = () => {
     console.log(user)
   }
 /*GET useEffect para que ao carregar a pagina a aplicação acessa o firebase, com a variavel data para listar os dados.*/
-  useEffect (() => {
+/*   useEffect (() => {
     const getUsers = async () => {
-      const data = await getDocs(userCollectionRef)
+      const data = await getDocs(userCollectionRef) */
       /* console.log(data) */
       /*Logica para printar os dados do firestore na tela */
-      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+/*       setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
     };
     getUsers()
-  },[userCollectionRef]);
+  },[userCollectionRef]); */
+
 
   /*Delete*/
 
@@ -95,7 +97,3 @@ export const App = () => {
     </div>
   )
 };
-
-// Initialize Firebase
-/* const app = initializeApp(firebaseConfig); */
-/* const analytics = getAnalytics(app); */

@@ -48,7 +48,6 @@ const validarCamposObrigatorios = () => {
       return false;
     }
   }
-
   // Se todos os campos obrigatórios estiverem preenchidos, retorna verdadeiro
   return true;
 };
@@ -111,33 +110,36 @@ export const App = () => {
 
   return (
     <div className="container-form">
-      <img className="img-logo" src="/logo-licita-canvas-semfundo.png "alt="" />
-      <h1 className="title-form">Preencha as informações a seguir e receba o Licita Canvas:</h1>
-      <form action="" method="">
-        <input type="text" placeholder="Nome completo" id="nome" value={nome} onChange={(e) => setNome(e.target.value)} pattern="[a-zA-Z]{3,}" title="Digite seu nome sem usar números" required/>
-        <input type="email" placeholder="email@email.com" id="email" value={email} onChange={(e) => setEmail(e.target.value)} title="Digite seu email" required/>
-        <input type="text" placeholder="(67)966666666" id="telefone" value={telefone} onChange={(e) => setTelefone(e.target.value)}  pattern="\([0-9]{2}\)[0-9]{4}[0-9]{4}" title="Digite seu telefone. Apenas números" required/>
-        <input type="text" placeholder="Órgão ou entidade governamental" value={entidadegov} onChange={(e) => setEntidadeGov(e.target.value)}/>
-        <input type="text" placeholder="Cidade" id="cidade" value={cidade} onChange={(e) => setCidade(e.target.value)} required/>
-        <input type="text" placeholder="Estado" id="estado" value={estado} onChange={(e) => setEstado(e.target.value)} required/>
-        <button className="button-form" onClick={() => { criarUser(); downloadCanvas(); }}>Baixar Canvas</button>
-      </form>
+      <div className="bg-form">
+       <img className="img-logo" src="/logo-licita-canvas-semfundo.png "alt="" />
+        <h1 className="title-form">Preencha as informações a seguir e receba o Licita Canvas:</h1>
+        <form action="" method="">
+          <input type="text" placeholder="Nome completo" id="nome" value={nome} onChange={(e) => setNome(e.target.value)} pattern="[a-zA-Z]{3,}" title="Digite seu nome sem usar números" required/>
+          <input type="email" placeholder="email@email.com" id="email" value={email} onChange={(e) => setEmail(e.target.value)} title="Digite seu email" required/>
+          <input type="text" placeholder="(67)999636245" id="telefone" value={telefone} onChange={(e) => setTelefone(e.target.value)}  pattern="\([0-9]{2}\)[0-9]{4}[0-9]{4}" title="Digite seu telefone. Apenas números" required/>
+          <input type="text" placeholder="Órgão ou entidade governamental" value={entidadegov} onChange={(e) => setEntidadeGov(e.target.value)}/>
+          <input type="text" placeholder="Cidade" id="cidade" value={cidade} onChange={(e) => setCidade(e.target.value)} required/>
+          <input type="text" placeholder="Estado" id="estado" value={estado} onChange={(e) => setEstado(e.target.value)} required/>
+          <button className="button-form" onClick={() => { criarUser(); downloadCanvas(); }}>Baixar Canvas</button>
+        </form>
+      
 
-      <ul>
-        {users.map(user => {
-          return (
-            <div key={user.id}> 
-              <li>{user.nome}</li>
-              <li>{user.email}</li>
-              <li>{user.telefone}</li>
-              <li>{user.entidadegov}</li>
-              <li>{user.cidade}</li>
-              <li>{user.estado}</li>
-              <button onClick={() => deleteUser(user.id)}>Deletar</button>
-            </div>
-          )
-        })}
-      </ul>
+        <ul>
+          {users.map(user => {
+            return (
+              <div key={user.id}> 
+                <li>{user.nome}</li>
+                <li>{user.email}</li>
+                <li>{user.telefone}</li>
+                <li>{user.entidadegov}</li>
+                <li>{user.cidade}</li>
+                <li>{user.estado}</li>
+                <button onClick={() => deleteUser(user.id)}>Deletar</button>
+              </div>
+            )
+          })}
+        </ul>
+      </div>
     </div>
   )
 };

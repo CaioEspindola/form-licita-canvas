@@ -131,14 +131,14 @@ input:focus {
 @media only screen and (max-width: 425px) {
 
   .bg-form {
-    width: 400px;
+    width: 370px;
     height: 650px;
   }  
   input {
-    width: 350px;
+    width: 340px;
   }
   .button-form {
-    width: 350px;
+    width: 340px;
   }
   .img-logo {     
     max-width: 100vw;  
@@ -152,12 +152,12 @@ input:focus {
 @media only screen and (max-width: 375px) {
 
   .bg-form {
-    width: 300px;
+    width: 270px;
   }
   input {
-    width: 250px;
+    width: 240px;
   }
   .button-form {
-    width: 250px;
+    width: 240px;
   }
 }

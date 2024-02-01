@@ -68,7 +68,13 @@ a {
   color: black;
   font-size: 19px;
   text-align: center;
-  margin-bottom: 20px;
+/*   margin-bottom: 20px; */
+}
+p {
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-align: center;
+  color: red;
 }
 
 form {
@@ -150,6 +156,10 @@ input:focus {
 
 /*smartphones M P*/
 @media only screen and (max-width: 375px) {
+
+  p {
+    font-size: 10px;
+  }
 
   .bg-form {
     width: 270px;

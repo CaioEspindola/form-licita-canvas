@@ -3,13 +3,14 @@ import { addDoc, collection, getFirestore, doc, deleteDoc } from "firebase/fires
 import { useState } from "react";
 import './App.css'
 
-//Start Function downloadCanvas. Função e logica para fazer o download apos preencher o form.
+/*START DOWNLOAD FUNCTION*/ 
+//Função e logica para fazer o download apos preencher o form.
 const downloadCanvas = () => {
   // Verifica se todos os campos obrigatórios estão preenchidos
   const camposObrigatoriosPreenchidos = validarCamposObrigatorios();
 
   if (camposObrigatoriosPreenchidos) {
-    // Substitua 'licita-canvas-download.png' pelo nome real do seu arquivo
+    
     const arquivoCanvas = '/licita-canvas-download.png';
 
     // Cria um objeto Blob com a imagem
@@ -35,25 +36,41 @@ const downloadCanvas = () => {
     /* alert('Preencha todos os campos obrigatórios antes de baixar o arquivo.'); */
   }
 };
+/*END DOWNLOAD FUNCTION*/
 
+/*START VALIDATION*/
 const validarCamposObrigatorios = () => {
-  
   const camposObrigatorios = ['nome', 'email', 'telefone', 'cidade', 'estado'];
 
   for (const campo of camposObrigatorios) {
-    const valorCampo = document.getElementById(campo).value;
+    const inputElement = document.getElementById(campo);
+    const valorCampo = inputElement.value;
 
-    // Se algum campo obrigatório estiver vazio, retorna falso
+    // Verifica se o campo está vazio
     if (!valorCampo) {
+     /*  alert('Não foi enviado! Preencha todos os campos obrigatórios.'); */
       return false;
     }
+
+    // Verifica se o campo atende às regras de tipo e padrão (pattern)
+    if (inputElement.hasAttribute('type') && inputElement.hasAttribute('pattern')) {
+      const type = inputElement.getAttribute('type');
+      const pattern = new RegExp(inputElement.getAttribute('pattern'));
+
+      if (type === 'text' && !pattern.test(valorCampo)) {
+       /*  alert(`Não foi enviado! Preencha corretamente o campo ${campo}.`); */
+        return false;
+      }     
+    }
   }
-  // Se todos os campos obrigatórios estiverem preenchidos, retorna verdadeiro
+  // Se todos os campos obrigatórios e suas regras foram atendidos, retorna verdadeiro
+  /* alert('Enviado com sucesso!'); */
   return true;
 };
+/*END VALIDATION*/
 
-//End Function downloadCanvas
 
+/*START CONNECTION DATABASE*/
 const firebaseApp = initializeApp ({
   apiKey: "AIzaSyA8S-mCR6yq40d37H0QTDcDU2BzyCA4NOI",
   authDomain: "db-form-licita-canvas.firebaseapp.com",
@@ -63,6 +80,7 @@ const firebaseApp = initializeApp ({
   appId: "1:30261155083:web:4951506fe1a834e45d3e0e",
   measurementId: "G-0LGH5HK7WV" */
 });
+/*END CONNECTION DATABASE*/
 
 export const App = () => {
   const [ nome, setNome ] = useState("")
@@ -78,17 +96,32 @@ export const App = () => {
   const db = getFirestore(firebaseApp)
   const userCollectionRef = collection(db, 'users')
 
-  async function criarUser() {
-   const user = await addDoc(userCollectionRef, {
-     nome, 
-     email, 
-     telefone, 
-     entidadegov, 
-     cidade, 
-     estado,
-    })
-    console.log(user)
+/*START CRIATE USER*/
+  async function criarUser() {   
+
+    const camposObrigatoriosValidos = validarCamposObrigatorios();
+
+    if (camposObrigatoriosValidos) {
+      try {
+        const user = await addDoc(userCollectionRef, {
+          nome,
+          email,
+          telefone,
+          entidadegov,
+          cidade,
+          estado,
+        });
+        console.log('Usuário criado com sucesso:', user);
+        alert('Enviado com sucesso!');
+      } catch (error) {
+        console.error('Erro ao criar usuário:', error);
+      }
+    } else {
+      console.log('Erro ao enviar formulário. Preencha corretamente todos os campos.');
+      alert('Erro ao enviar formulário. Preencha corretamente todos os campos.');
+    }
   }
+  /*END CRIATE USER*/
 /*GET useEffect para que ao carregar a pagina a aplicação acessa o firebase, com a variavel data para listar os dados.*/
 /*   useEffect (() => {
     const getUsers = async () => {
@@ -101,12 +134,12 @@ export const App = () => {
   },[userCollectionRef]); */
 
 
-  /*Delete*/
-
+  /*START Delete*/
   async function deleteUser(id) {
     const userDoc = doc(db, 'users', id)
     await deleteDoc(userDoc);
   }
+  /*END Delete*/
 
   return (
     <div className="container-form">
@@ -116,14 +149,12 @@ export const App = () => {
         <form action="" method="">
           <input type="text" placeholder="Nome completo" id="nome" value={nome} onChange={(e) => setNome(e.target.value)} pattern="[a-zA-Z]{3,}" title="Digite seu nome sem usar números" required/>
           <input type="email" placeholder="email@email.com" id="email" value={email} onChange={(e) => setEmail(e.target.value)} title="Digite seu email" required/>
-          <input type="text" placeholder="(67)999636245" id="telefone" value={telefone} onChange={(e) => setTelefone(e.target.value)}  pattern="\([0-9]{2}\)[0-9]{4}[0-9]{4}" title="Digite seu telefone. Apenas números" required/>
+          <input type="text" placeholder="(67)999636245" id="telefone" value={telefone} onChange={(e) => setTelefone(e.target.value)}  pattern="\([0-9]{2}\)[0-9]{9}" title="Digite seu telefone. Apenas números" required/>
           <input type="text" placeholder="Órgão ou entidade governamental" value={entidadegov} onChange={(e) => setEntidadeGov(e.target.value)}/>
           <input type="text" placeholder="Cidade" id="cidade" value={cidade} onChange={(e) => setCidade(e.target.value)} required/>
           <input type="text" placeholder="Estado" id="estado" value={estado} onChange={(e) => setEstado(e.target.value)} required/>
-          <button className="button-form" onClick={() => { criarUser(); downloadCanvas(); }}>Baixar Canvas</button>
+          <button className="button-form" onClick={(e) => { e.preventDefault(); criarUser(); downloadCanvas(); }}>Baixar Canvas</button>
         </form>
-      
-
         <ul>
           {users.map(user => {
             return (

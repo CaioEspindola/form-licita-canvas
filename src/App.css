@@ -83,7 +83,7 @@ form {
   align-items: center;  
 }
 
-input {
+input, select {
   width: 500px;
   max-width: 90vw;
   height: 40px;
@@ -94,7 +94,7 @@ input {
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
 }
 
-input:focus {
+input:focus, select:focus {
   outline: none;    
 }
 
@@ -114,6 +114,14 @@ input:focus {
   color: #fff;
 }
 
+.input-error { 
+  border-color: red;
+}
+
+.error-message {
+  color: red;
+}
+
 /*Responsive section*/
 /*notbook*/
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
@@ -122,7 +130,7 @@ input:focus {
     width: 500px;
     height: 660px;
   }
-  input {
+  input, select {
     width: 450px;
   }
   .button-form {
@@ -140,7 +148,7 @@ input:focus {
     width: 370px;
     height: 650px;
   }  
-  input {
+  input, select {
     width: 340px;
   }
   .button-form {
@@ -164,7 +172,7 @@ input:focus {
   .bg-form {
     width: 270px;
   }
-  input {
+  input, select {
     width: 240px;
   }
   .button-form {

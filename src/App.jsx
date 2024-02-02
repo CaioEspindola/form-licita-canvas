@@ -1,6 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, getFirestore, doc, deleteDoc } from "firebase/firestore";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { isEmail, isMobilePhone } from "validator"
 import './App.css'
 
 
@@ -17,21 +20,29 @@ const firebaseApp = initializeApp ({
 /*END CONNECTION DATABASE*/
 
 export const App = () => {
-  const [ nome, setNome ] = useState("")
-  const [ email, setEmail ] = useState("")
-  const [ telefone, setTelefone ] = useState("")
-  const [ entidadegov, setEntidadeGov ] = useState("")
-  const [ estado, setEstado ] = useState("")
-  const [ cidade, setCidade ] = useState("")
+  const [ nome ] = useState("")
+  const [ email ] = useState("")
+  const [ telefone ] = useState("")
+  const [ entidadegov ] = useState("")
+  const [ estado ] = useState("")
+  const [ cidade ] = useState("")
 
   // eslint-disable-next-line
   const [ users, setUsers ] = useState([])
 
-  const [ msg, setMsg ] = useState("")
 
   const db = getFirestore(firebaseApp)
   const userCollectionRef = collection(db, 'users')
 
+/*START HOOK-FORM*/
+  
+  const { register, handleSubmit, formState: { errors } } = useForm() //Para identificar os inputs e validar
+  const onSubmit = (data) => {
+    console.log(data) 
+    console.log({ errors })
+  }
+
+/*END HOOK-FORM*/
 /*START CREATE USER*/
   async function criarUser() {   
 
@@ -79,35 +90,10 @@ export const App = () => {
   }
   /*END DELETE*/
 
-  /*START VALIDATION*/
-const validarCamposObrigatorios = () => {
-  const camposObrigatorios = ['nome', 'email', 'telefone', 'estado', 'cidade'];
-
-  for (const campo of camposObrigatorios) {
-    const inputElement = document.getElementById(campo);
-    const valorCampo = inputElement.value;
-
-    // Verifica se o campo está vazio
-    if (!valorCampo) {
-     /*  alert('Não foi enviado! Preencha todos os campos obrigatórios.'); */
-      return false;
-    }
-
-    // Verifica se o campo atende às regras de tipo e padrão (pattern)
-    if (inputElement.hasAttribute('type') && inputElement.hasAttribute('pattern')) {
-      const type = inputElement.getAttribute('type');
-      const pattern = new RegExp(inputElement.getAttribute('pattern'));
-
-      if (type === 'text' && !pattern.test(valorCampo)) {
-       /*  alert(`Não foi enviado! Preencha corretamente o campo ${campo}.`); */
-        return false;
-      }     
-    }
-  }
-  // Se todos os campos obrigatórios e suas regras foram atendidos, retorna verdadeiro
-  /* alert('Enviado com sucesso!'); */
-  return true;
-};
+/*START VALIDATION*/
+function validarCamposObrigatorios() {
+  return (console.log("nada"))
+}
 /*END VALIDATION*/
 
 /*START DOWNLOAD FUNCTION*/ 
@@ -140,143 +126,148 @@ const downloadCanvas = () => {
       });
   } else {
     // Se campos obrigatórios não estiverem preenchidos, você pode exibir uma mensagem ou tomar outra ação.
-    /* alert('Preencha todos os campos obrigatórios antes de baixar o arquivo.'); */
+    // alert('Preencha todos os campos obrigatórios antes de baixar o arquivo.'); 
   }
 };
 /*END DOWNLOAD FUNCTION*/
 
-/* const handleFormSubmit = (e) => {
-  // Verifica se o campo de nome está vazio
-  if (nome === "") {
-    e.preventDefault(); // Impede o envio do formulário
-    setMsg('Cachaça Preencha com seu nome completo');
-  } else {
-    setMsg(''); // Limpa a mensagem de erro se o nome estiver preenchido
-  }
-};
- */
-const validaForm = () => {
-  const nomeInputElement = document.getElementById('nome');
-  const nome = nomeInputElement.value
+console.log("RENDER")
 
-  const emailInputElement = document.getElementById('email');
-  const email = emailInputElement.value
-
-  const telefoneInputElement = document.getElementById('telefone')
-  const telefone = telefoneInputElement.value;
-
-  const estadoInputElement = document.getElementById('estado');
-  const estado = emailInputElement.value
-
-  const cidadeInputElement = document.getElementById('cidade');
-  const cidade = emailInputElement.value
-  
-  if (nome === "") {
-    setMsg('*Preencha com seu nome completo')
-    return false
-  }
- 
-  if (!nomeInputElement.checkValidity()) {
-    setMsg('*Por favor, Preencha com seu nome completo')
-    return false;
-  }
-  if (email === "") {
-    setMsg('*Digite seu email.')
-    return false
-  }
-  if (!emailInputElement.checkValidity()) {
-    setMsg('*Digite um email válido e nao se esqueça do @ e .')
-    return false;
-  }
-  if (telefone === "") {  
-    setMsg('*Digite seu número de telefone como esta no exemplo')
-    return false
-  }
-  if (!telefoneInputElement.checkValidity()) {
-    setMsg('*Digite sem utilizar espaços e com o DDD entre ( )')
-    return false;
-  }
-  if (estado === "") {
-    setMsg('*Digite o nome do estado')
-    return false    
-  }
-  if (!estadoInputElement.checkValidity()) {
-    setMsg('*Por favor, Preencha com seu nome completo')
-    return false;
-  }
-  if (cidade === "") {
-    setMsg('*Digite o nome da cidade')
-    return false
-  }
-  if (!cidadeInputElement.checkValidity()) {
-    setMsg('*Por favor, Preencha com seu nome completo')
-    return false;
-  }
-  // Limpar os campos após o envio
-    setMsg("")
-    setNome("");
-    setEmail("");
-    setTelefone("");
-    setEntidadeGov("");
-    setCidade("");
-    setEstado("");
-  return true  
-}
   return (
     <div className="container-form">
       <div className="bg-form">
        <img className="img-logo" src="/logo-licita-canvas-semfundo.png "alt="" />
           <h1 className="title-form">Preencha as informações a seguir e receba o Licita Canvas:</h1>        
-          <p>{msg}</p>          
+          <p>{}</p>          
         <form action="" method="">
           <input 
+          className={errors?.name && "input-error"}           
           type="text" 
           placeholder="Nome completo" 
-          id="nome" value={nome} 
-          onChange={(e) => 
-          setNome(e.target.value)}             
-          pattern="[a-zA-Z]{3,}" 
-          title="*Digite seu nome sem usar números" 
-          required/>
+          id="nome"           
+          {...register('name', {required: true, minLength: 3 })} 
+          />
+          {errors?.name?.type === "required" && (
+              <p className="error-message">Digite seu nome.</p>
+          )} 
+           {errors?.name?.type === "minLength" && (
+              <p className="error-message">Por favor, digite o nome completo.</p>
+          )} 
 
-          <input type="email" 
+          <input 
+          className={errors?.email && "input-error"}
+          type="email" 
           placeholder="email@email.com" 
-          id="email" value={email} 
-          onChange={(e) => setEmail(e.target.value)}           
-          title="Digite seu email" 
-          required/>
+          id="email"           
+          {...register('email', {required: true, validate: (value) => isEmail(value)})}
+          />
+          {errors?.email?.type === "required" && (
+            <p className="error-message">Digite seu email.</p>
+          )}
+          {errors?.email?.type === "validate" && (
+            <p className="error-message">Email inválido.</p>
+          )}
 
-          <input type="text" 
-          placeholder="(67)999636245" 
-          id="telefone" 
-          value={telefone} 
-          onChange={(e) => setTelefone(e.target.value)}            
-          pattern="\([0-9]{2}\)[0-9]{9}" 
-          title="Digite seu telefone. Apenas números" 
-          required/>
+          <input 
+          className={errors?.telefone && "input-error"}
+          type="text" 
+          placeholder="67999668714" 
+          id="telefone"          
+          {...register('telefone', {required: true, 
+            validate: (value) => isMobilePhone(String(value), 'pt-BR', { strictMode: false, min: 10, max: 13  })
+            })} 
+          />
+          {errors?.telefone?.type === "required" && (
+            <p className="error-message">Digite seu telefone.</p>
+          )}
+          {errors?.telefone?.type === "validate" && (
+            <p className="error-message">Digite apenas números e sem espaços.</p>
+          )}
 
-          <input type="text" 
-          placeholder="Órgão ou entidade governamental" 
-          value={entidadegov} 
-          onChange={(e) => setEntidadeGov(e.target.value)}/>
+          <input 
+          /* className={errors?.name && "input-error"} */
+          type="text" 
+          placeholder="Órgão ou entidade governamental"           
+          {...register('entidadegov')}
+          /* {errors?.name?.type === "required" && (
+            <p className="error-message">Name is required.</p>
+          )} */
+          />
 
-          <input    
+          <select
+          className={errors?.estado && "input-error"}
           type="text" 
           placeholder="Estado" 
-          id="estado" 
-          value={estado} 
-          onChange={(e) => 
-          setEstado(e.target.value)} 
-          required/>
+          id="estado"           
+          {...register('estado', { validate: (value) => {
+            return value !== "0"
+          }})}
+          >
+            <option value="0">Selecione o Estado</option>
+            <option value="AC">Acre</option>
+            <option value="AL">Alagoas</option>
+            <option value="AP">Amapá</option>
+            <option value="AM">Amazonas</option>
+            <option value="BA">Bahia</option>
+            <option value="CE">Ceará</option>
+            <option value="DF">Distrito Federal</option>
+            <option value="ES">Espírito Santo</option>
+            <option value="GO">Goiás</option>
+            <option value="MA">Maranhão</option>
+            <option value="MT">Mato Grosso</option>
+            <option value="MS">Mato Grosso do Sul</option>
+            <option value="MG">Minas Gerais</option>
+            <option value="PA">Pará</option>
+            <option value="PB">Paraíba</option>
+            <option value="PR">Paraná</option>
+            <option value="PE">Pernambuco</option>
+            <option value="PI">Piauí</option>
+            <option value="RJ">Rio de Janeiro</option>
+            <option value="RN">Rio Grande do Norte</option>
+            <option value="RS">Rio Grande do Sul</option>
+            <option value="RO">Rondônia</option>
+            <option value="RR">Roraima</option>
+            <option value="SC">Santa Catarina</option>
+            <option value="SP">São Paulo</option>
+            <option value="SE">Sergipe</option>
+            <option value="TO">Tocantins</option>
+          </select>
+          
+          {errors?.estado?.type === "validade" && (
+            <p className="error-message">Selecione um estado estado.</p>
+          )}
+          {errors?.estado?.type === "0" && (
+              <p className="error-message">Por favor, escolha o estado.</p>
+          )}
 
-          <input type="text" 
+          {/* <input    
+          className={errors?.estado && "input-error"}
+          type="text" 
+          placeholder="Estado" 
+          id="estado"           
+          {...register('estado', {required: true, minLength: 2 })}
+          />
+          {errors?.estado?.type === "required" && (
+            <p className="error-message">Digite o estado.</p>
+          )}
+          {errors?.estado?.type === "minLength" && (
+              <p className="error-message">Por favor, digite o estado corretamente.</p>
+          )} */}
+
+          <input 
+          className={errors?.cidade && "input-error"}
+          type="text" 
           placeholder="Cidade" 
-          id="cidade" 
-          value={cidade} 
-          onChange={(e) => setCidade(e.target.value)} 
-          required/>
-
-          <button className="button-form" onClick={(e) => { e.preventDefault(); validaForm(); criarUser(); downloadCanvas(); }}>Baixar Canvas</button>
+          id="cidade"           
+          {...register('cidade', {required: true, minLength: 2 })}
+          />
+          {errors?.cidade?.type === "required" && (
+            <p className="error-message">Digite a cidade.</p>
+          )}
+          {errors?.cidade?.type === "minLength" && (
+              <p className="error-message">Por favor, digite a cidade corretamente.</p>
+          )}
+          <button className="button-form" onClick={(e) => { e.preventDefault(); handleSubmit(onSubmit)(); criarUser(); downloadCanvas(); }}>Baixar Canvas</button>
         </form>
         <ul>
           {users.map(user => {

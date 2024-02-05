@@ -120,7 +120,8 @@ input:focus, select:focus {
 
 .error-message {
   color: red;  
-  padding: 2px;  
+  padding: 3px;  
+  margin-top: -5px;
 }
 
 /*Responsive section*/

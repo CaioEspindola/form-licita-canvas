@@ -141,6 +141,9 @@ input:focus, select:focus {
   .button-form {
     width: 450px;
   }
+  .error-message {
+    font-size: 14px;
+  }
 
 }
 
@@ -164,6 +167,9 @@ input:focus, select:focus {
   .img-logo {     
     max-width: 100vw;  
   }
+  .error-message {
+    font-size: 12px;
+  }
 
 /*smartphones M P*/
 @media only screen and (max-width: 375px) {
@@ -185,5 +191,8 @@ input:focus, select:focus {
   }
   .button-form {
     width: 240px;
+  }
+  .error-message {
+    font-size: 11px;
   }
 }

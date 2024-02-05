@@ -193,6 +193,6 @@ input:focus, select:focus {
     width: 240px;
   }
   .error-message {
-    font-size: 11px;
+    font-size: 10px;
   }
 }

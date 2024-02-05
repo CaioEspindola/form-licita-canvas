@@ -66,9 +66,9 @@ a {
 
 .title-form {
   color: black;
-  font-size: 19px;
+  font-size: 16px;
   text-align: center;
-/*   margin-bottom: 20px; */
+  margin-bottom: 20px;
 }
 /* p {
   font-size: 14px;
@@ -123,11 +123,11 @@ input:focus, select:focus {
 }
 
 /*Responsive section*/
-/*notbook*/
+/*notbook e Tablet*/
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
 
   .title-form {
-    font-size: 17px;
+    font-size: 14px;
   }
   .bg-form {
     width: 500px;

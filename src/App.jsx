@@ -137,7 +137,7 @@ console.log("RENDER")
     <div className="container-form">
       <div className="bg-form">
        <img className="img-logo" src="/logo-licita-canvas-semfundo.png "alt="" />
-          <h1 className="title-form">Preencha as informações a seguir e receba o Licita Canvas:</h1>        
+          <h1 className="title-form">Preencha as informações a seguir e receba o <br/> Licita Canvas:</h1>        
           <p>{}</p>          
         <form action="" method="">
           <input 

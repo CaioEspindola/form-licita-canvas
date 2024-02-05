@@ -1,9 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, getFirestore, doc, deleteDoc } from "firebase/firestore";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 
-import { isEmail, isMobilePhone } from "validator"
+import { isEmail } from "validator"
 import './App.css'
 
 
@@ -20,55 +20,52 @@ const firebaseApp = initializeApp ({
 /*END CONNECTION DATABASE*/
 
 export const App = () => {
-  const [ nome ] = useState("")
-  const [ email ] = useState("")
-  const [ telefone ] = useState("")
-  const [ entidadegov ] = useState("")
-  const [ estado ] = useState("")
-  const [ cidade ] = useState("")
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  const formRef = useRef();
 
-  // eslint-disable-next-line
-  const [ users, setUsers ] = useState([])
+  const [users] = useState([]);
 
+  const db = getFirestore(firebaseApp);
+  const userCollectionRef = collection(db, 'users');
 
-  const db = getFirestore(firebaseApp)
-  const userCollectionRef = collection(db, 'users')
-
-/*START HOOK-FORM*/
-  
-  const { register, handleSubmit, formState: { errors } } = useForm() //Para identificar os inputs e validar
-  const onSubmit = (data) => {
-    console.log(data) 
-    console.log({ errors })
-  }
-
-/*END HOOK-FORM*/
-/*START CREATE USER*/
-  async function criarUser() {   
-
-    const camposObrigatoriosValidos = validarCamposObrigatorios();
-
-    if (camposObrigatoriosValidos) {
+  const onSubmit = async (data) => {
+    // Form validation using react-hook-form
+    if (Object.keys(errors).length === 0) {
       try {
         const user = await addDoc(userCollectionRef, {
-          nome,
-          email,
-          telefone,
-          entidadegov,
-          estado,
-          cidade,
+          nome: data.nome || '',
+          email: data.email || '',
+          telefone: data.telefone || '',
+          entidadegov: data.entidadegov || '',
+          estado: data.estado || '',
+          cidade: data.cidade || '',
         });
+
         console.log('Usuário criado com sucesso:', user);
-        alert('Enviado com sucesso!');
+        alert('Enviado com sucesso!');        
+        reset();
+        downloadCanvas();
       } catch (error) {
+        alert('Erro ao preencher o formullário, tente novamente.');
         console.error('Erro ao criar usuário:', error);
       }
     } else {
       console.log('Erro ao enviar formulário. Preencha corretamente todos os campos.');
-      /* alert('Erro ao enviar formulário. Preencha corretamente todos os campos.'); */
     }
+  };
+
+/*START CREATE USER*/
+const criarUser = async () => {
+  try {
+    const validationResult = await handleSubmit(onSubmit)(); // Dispara a validação e envio do formulário
+    if (validationResult) {
+      formRef.current.reset(); // Use a referência para chamar reset      
+    }
+  } catch (error) {
+    console.error('Erro ao preencher o formulário, tente novamente.', error);
   }
-  /*END CREATE USER*/
+};
+/*END CREATE USER*/
 
 /*START GET USER*/
 /*GET useEffect para que ao carregar a pagina a aplicação acessa o firebase, com a variavel data para listar os dados.*/
@@ -90,67 +87,49 @@ export const App = () => {
   }
   /*END DELETE*/
 
-/*START VALIDATION*/
-function validarCamposObrigatorios() {
-  return (console.log("nada"))
-}
-/*END VALIDATION*/
-
 /*START DOWNLOAD FUNCTION*/ 
-//Função e logica para fazer o download apos preencher o form.
-const downloadCanvas = () => {
-  // Verifica se todos os campos obrigatórios estão preenchidos
-  const camposObrigatoriosPreenchidos = validarCamposObrigatorios();
+  const downloadCanvas = () => {
+  const arquivoCanvas = '/licita-canvas-download.png';
 
-  if (camposObrigatoriosPreenchidos) {
-    
-    const arquivoCanvas = '/licita-canvas-download.png';
+  // Cria um objeto Blob com a imagem
+  fetch(arquivoCanvas)
+    .then(response => response.blob())
+    .then(blob => {
+      // link temporário para o Blob
+      const url = URL.createObjectURL(blob);
 
-    // Cria um objeto Blob com a imagem
-    fetch(arquivoCanvas)
-      .then(response => response.blob())
-      .then(blob => {
-        // Cria um link temporário para o Blob
-        const url = URL.createObjectURL(blob);
+      // link <a> para o Blob e inicia o download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'licita-canvas-download.png';
+      document.body.appendChild(link);
+      link.click();
 
-        // Cria um link <a> para o Blob e inicia o download
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'licita-canvas-download.png';
-        document.body.appendChild(link);
-        link.click();
-
-        // Libera recursos
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      });
-  } else {
-    // Se campos obrigatórios não estiverem preenchidos, você pode exibir uma mensagem ou tomar outra ação.
-    // alert('Preencha todos os campos obrigatórios antes de baixar o arquivo.'); 
-  }
+      // Libera recursos
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    });
 };
 /*END DOWNLOAD FUNCTION*/
-
 console.log("RENDER")
 
   return (
     <div className="container-form">
       <div className="bg-form">
        <img className="img-logo" src="/logo-licita-canvas-semfundo.png "alt="" />
-          <h1 className="title-form">Preencha as informações a seguir e receba o <br/> Licita Canvas:</h1>        
-          <p>{}</p>          
-        <form action="" method="">
+          <h1 className="title-form">Preencha as informações a seguir e receba o <br/> Licita Canvas:</h1>                  
+          <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
           <input 
-          className={errors?.name && "input-error"}           
+          className={errors?.nome && "input-error"}           
           type="text" 
           placeholder="Nome completo" 
           id="nome"           
-          {...register('name', {required: true, minLength: 3 })} 
+          {...register('nome', {required: true, minLength: 3 })} 
           />
-          {errors?.name?.type === "required" && (
+          {errors?.nome?.type === "required" && (
               <p className="error-message">Digite seu nome.</p>
           )} 
-           {errors?.name?.type === "minLength" && (
+           {errors?.nome?.type === "minLength" && (
               <p className="error-message">Por favor, digite o nome completo.</p>
           )} 
 
@@ -174,7 +153,8 @@ console.log("RENDER")
           placeholder="67999668714" 
           id="telefone"          
           {...register('telefone', {required: true, 
-            validate: (value) => isMobilePhone(String(value), 'pt-BR', { strictMode: false, min: 10, max: 13  })
+            validate: (value) => /^\d{10,13}$/.test(value)
+
             })} 
           />
           {errors?.telefone?.type === "required" && (
@@ -184,14 +164,10 @@ console.log("RENDER")
             <p className="error-message">Digite apenas números e sem espaços.</p>
           )}
 
-          <input 
-          /* className={errors?.name && "input-error"} */
+          <input           
           type="text" 
           placeholder="Órgão ou entidade governamental"           
-          {...register('entidadegov')}
-          /* {errors?.name?.type === "required" && (
-            <p className="error-message">Name is required.</p>
-          )} */
+          {...register('entidadegov')} 
           />
 
           <select
@@ -240,20 +216,6 @@ console.log("RENDER")
               <p className="error-message">Por favor, escolha o estado.</p>
           )}
 
-          {/* <input    
-          className={errors?.estado && "input-error"}
-          type="text" 
-          placeholder="Estado" 
-          id="estado"           
-          {...register('estado', {required: true, minLength: 2 })}
-          />
-          {errors?.estado?.type === "required" && (
-            <p className="error-message">Digite o estado.</p>
-          )}
-          {errors?.estado?.type === "minLength" && (
-              <p className="error-message">Por favor, digite o estado corretamente.</p>
-          )} */}
-
           <input 
           className={errors?.cidade && "input-error"}
           type="text" 
@@ -267,7 +229,7 @@ console.log("RENDER")
           {errors?.cidade?.type === "minLength" && (
               <p className="error-message">Por favor, digite a cidade corretamente.</p>
           )}
-          <button className="button-form" onClick={(e) => { e.preventDefault(); handleSubmit(onSubmit)(); criarUser(); downloadCanvas(); }}>Baixar Canvas</button>
+          <button className="button-form" onClick={(e) => { e.preventDefault(); criarUser(); }}>Baixar Canvas</button>
         </form>
         <ul>
           {users.map(user => {

@@ -115,11 +115,12 @@ input:focus, select:focus {
 }
 
 .input-error { 
-  border-color: red;
+  border-color: red; 
 }
 
 .error-message {
-  color: red;
+  color: red;  
+  padding: 2px;  
 }
 
 /*Responsive section*/

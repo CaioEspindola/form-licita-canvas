@@ -44,24 +44,25 @@ a {
   justify-content: center;
   
   width: 100vw;    
-  height: 100vh;  
+  height: 100vh; 
   background-color:rgb(250, 191, 184)
 }
 
 .bg-form {
   background-color:  #dbe2ff;
   width: 600px;  
-  height: 800px;  
+  height: 95vh; 
   border-radius: 10px;
   border: #674ea7 3px solid;
   display: flex;
-  flex-direction: column;
-  
+  flex-direction: column;  
 }
 
 .img-logo {
   max-width: 80vw;
-  margin-bottom: 50px;  
+  width: 500px;
+  margin-bottom: 10px;  
+  align-self: center;
 }
 
 .title-form {
@@ -81,6 +82,13 @@ form {
   display: flex;
   flex-direction: column;
   align-items: center;  
+}
+
+.label-form {
+  align-self: flex-start;
+  margin-left: 55px;
+  margin-bottom: 5px;
+  font-size: 14px;
 }
 
 input, select {
@@ -133,10 +141,14 @@ input:focus, select:focus {
   }
   .bg-form {
     width: 500px;
-    height: 760px;
+    /* height: 760px; */
   }
   input, select {
     width: 450px;
+  }
+  .label-form { 
+    margin-left: 30px;
+    font-size: 12px;
   }
   .button-form {
     width: 450px;
@@ -144,7 +156,9 @@ input:focus, select:focus {
   .error-message {
     font-size: 14px;
   }
-
+  .img-logo {    
+    width: 400px;
+  }
 }
 
 /*smartphones G*/
@@ -153,14 +167,17 @@ input:focus, select:focus {
   .title-form {
     font-size: 12px;
   }
-}
   .bg-form {
     width: 370px;
-    height: 700px;
+    /* height: 700px; */
   }  
   input, select {
     width: 340px;
   }
+  .label-form { 
+    margin-left: 20px;
+    font-size: 12px;
+  }  
   .button-form {
     width: 340px;
   }
@@ -170,6 +187,10 @@ input:focus, select:focus {
   .error-message {
     font-size: 12px;
   }
+  .img-logo {    
+    width: 300px;
+  }
+}
 
 /*smartphones M P*/
 @media only screen and (max-width: 375px) {
@@ -177,22 +198,27 @@ input:focus, select:focus {
   .title-form {
     font-size: 10px;
   }
-
   p {
     font-size: 10px;
   }
-
   .bg-form {
     width: 270px;
-    height: 650px;
+    height: 80vh;
   }
   input, select {
     width: 240px;
+  }
+  .label-form { 
+    margin-left: 15px;
+    font-size: 10px;
   }
   .button-form {
     width: 240px;
   }
   .error-message {
     font-size: 10px;
+  }  
+  .img-logo {    
+    width: 250px;
   }
 }

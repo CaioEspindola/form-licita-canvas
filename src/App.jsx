@@ -117,27 +117,33 @@ console.log("RENDER")
     <div className="container-form">
       <div className="bg-form">
        <img className="img-logo" src="/logo-licita-canvas-semfundo.png "alt="" />
-          <h1 className="title-form">Preencha as informações a seguir e receba o <br/> Licita Canvas:</h1>                  
+          <h1 className="title-form">Preencha as informações a seguir e receba o <br/> Licita Canvas:</h1> 
+                           
           <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+
+          <label className="label-form" htmlFor="nome">Nome completo:</label>
           <input 
           className={errors?.nome && "input-error"}           
           type="text" 
-          placeholder="Nome completo" 
-          id="nome"           
+          placeholder="Digite seu nome completo" 
+          id="nome"    
+          name="nome"       
           {...register('nome', {required: true, minLength: 3 })} 
           />
           {errors?.nome?.type === "required" && (
-              <p className="error-message">Digite seu nome.</p>
+              <p className="error-message">Digite seu nome completo.</p>
           )} 
            {errors?.nome?.type === "minLength" && (
               <p className="error-message">Por favor, digite o nome completo.</p>
           )} 
 
+          <label className="label-form" htmlFor="email">Email:</label>
           <input 
           className={errors?.email && "input-error"}
           type="email" 
           placeholder="email@email.com" 
-          id="email"           
+          id="email"      
+          name="email"       
           {...register('email', {required: true, validate: (value) => isEmail(value)})}
           />
           {errors?.email?.type === "required" && (
@@ -147,11 +153,13 @@ console.log("RENDER")
             <p className="error-message">Email inválido.</p>
           )}
 
-          <input 
+          <label className="label-form" htmlFor="telefone">Telefone:</label>
+          <input           
           className={errors?.telefone && "input-error"}
           type="text" 
           placeholder="67999668714" 
-          id="telefone"          
+          id="telefone"
+          name="telefone"            
           {...register('telefone', {required: true, 
             validate: (value) => /^\d{10,13}$/.test(value)
 
@@ -164,17 +172,22 @@ console.log("RENDER")
             <p className="error-message">Digite apenas números e sem espaços.</p>
           )}
 
+          <label className="label-form" htmlFor="entidadegov">Órgão ou entidade governamental:</label>
           <input           
           type="text" 
-          placeholder="Órgão ou entidade governamental"           
+          placeholder="Este campo não é obrigatório"           
           {...register('entidadegov')} 
+          id="entidadegov"
+          name="entidadegov"  
           />
 
+          <label className="label-form" htmlFor="estado">Estado:</label>
           <select
           className={errors?.estado && "input-error"}
           type="text" 
           placeholder="Estado" 
-          id="estado"           
+          id="estado"  
+          name="estado"     
           {...register('estado', { validate: (value) => {
             return value !== "0"
           }})}
@@ -216,11 +229,13 @@ console.log("RENDER")
               <p className="error-message">Por favor, escolha o estado.</p>
           )}
 
-          <input 
+          <label className="label-form" htmlFor="cidade">Cidade:</label>  
+          <input          
           className={errors?.cidade && "input-error"}
           type="text" 
-          placeholder="Cidade" 
+          placeholder="Digite qual a cidade da licitação" 
           id="cidade"           
+          name="cidade"
           {...register('cidade', {required: true, minLength: 2 })}
           />
           {errors?.cidade?.type === "required" && (

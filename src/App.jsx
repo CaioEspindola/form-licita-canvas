@@ -9,13 +9,13 @@ import './App.css'
 
 /*START CONNECTION DATABASE*/
 const firebaseApp = initializeApp ({
-  apiKey: "AIzaSyA8S-mCR6yq40d37H0QTDcDU2BzyCA4NOI",
-  authDomain: "db-form-licita-canvas.firebaseapp.com",
-  projectId: "db-form-licita-canvas",
-/*   storageBucket: "db-form-licita-canvas.appspot.com",
-  messagingSenderId: "30261155083",
-  appId: "1:30261155083:web:4951506fe1a834e45d3e0e",
-  measurementId: "G-0LGH5HK7WV" */
+  apiKey: "AIzaSyD-qTvTOhvdxojzgJ7lLH78c5lNNjqbXNg",
+  authDomain: "licita-canvas-form.firebaseapp.com",
+  projectId: "licita-canvas-form",
+/*storageBucket: "licita-canvas-form.appspot.com",
+  messagingSenderId: "144400210790",
+  appId: "1:144400210790:web:660020c34570f82c5886a7",
+  measurementId: "G-BTYT5DY215" */
 });
 /*END CONNECTION DATABASE*/
 

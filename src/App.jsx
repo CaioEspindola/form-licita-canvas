@@ -173,13 +173,21 @@ console.log("RENDER")
           )}
 
           <label className="label-form" htmlFor="entidadegov">Órgão ou entidade governamental:</label>
-          <input           
+          <input          
+          className={errors?.nome && "input-error"}   
           type="text" 
-          placeholder="Este campo não é obrigatório"           
-          {...register('entidadegov')} 
+          placeholder="Este campo não é obrigatório"          
           id="entidadegov"
           name="entidadegov"  
+          {...register('entidadegov', {required: true, minLength: 2 })} 
           />
+          {errors?.entidadegov?.type === "required" && (
+              <p className="error-message">Digite o nome da entidade.</p>
+          )} 
+           {errors?.entidadegov?.type === "minLength" && (
+              <p className="error-message">Por favor, digite o nome completo da entidade.</p>
+          )} 
+          
 
           <label className="label-form" htmlFor="estado">Estado:</label>
           <select
@@ -233,7 +241,7 @@ console.log("RENDER")
           <input          
           className={errors?.cidade && "input-error"}
           type="text" 
-          placeholder="Digite qual a cidade da licitação" 
+          placeholder="Digite qual a cidade." 
           id="cidade"           
           name="cidade"
           {...register('cidade', {required: true, minLength: 2 })}

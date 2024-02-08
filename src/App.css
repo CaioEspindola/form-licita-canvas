@@ -44,14 +44,14 @@ a {
   justify-content: center;
   
   width: 100vw;    
-  height: 100vh; 
+  height: 1200px; 
   background-color:rgb(250, 191, 184)
 }
 
 .bg-form {
   background-color:  #dbe2ff;
   width: 600px;  
-  height: 95vh; 
+  height: 1000px; 
   border-radius: 10px;
   border: #674ea7 3px solid;
   display: flex;
@@ -133,15 +133,19 @@ input:focus, select:focus {
 }
 
 /*Responsive section*/
+
 /*notbook e Tablet*/
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
+  .container-form {
+    height: 1000px;
+  }
 
   .title-form {
     font-size: 14px;
   }
   .bg-form {
     width: 500px;
-    /* height: 760px; */
+    height: 900px;
   }
   input, select {
     width: 450px;
@@ -163,13 +167,16 @@ input:focus, select:focus {
 
 /*smartphones G*/
 @media only screen and (max-width: 425px) {
+  .container-form {
+    height: 900px;
+  }
 
   .title-form {
     font-size: 12px;
   }
   .bg-form {
     width: 370px;
-    /* height: 700px; */
+    height: 800px;
   }  
   input, select {
     width: 340px;
@@ -193,7 +200,7 @@ input:focus, select:focus {
 }
 
 /*smartphones M P*/
-@media only screen and (max-width: 375px) {
+@media only screen and (max-width: 375px) {  
 
   .title-form {
     font-size: 10px;
@@ -203,7 +210,7 @@ input:focus, select:focus {
   }
   .bg-form {
     width: 270px;
-    height: 80vh;
+    height: 700px;
   }
   input, select {
     width: 240px;
